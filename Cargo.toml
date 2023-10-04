@@ -1,0 +1,32 @@
+[package]
+name = "firefly-reconciliator"
+version = "0.1.0"
+authors = ["Arne Beer <contact@arne.beer>"]
+homepage = "https://github.com/nukesor/pueue"
+repository = "https://github.com/nukesor/pueue"
+license = "MIT"
+edition = "2021"
+rust-version = "1.72"
+
+[dependencies]
+anyhow = "1"
+better-panic = "0.3"
+chrono = { version = "0.4", features = ["serde"] }
+clap = { version = "4", features = ["derive", "cargo"] }
+dirs = "4"
+dotenv = "0.15"
+log = "0.4"
+pretty_env_logger = "0.4"
+reqwest  = { version = "0.11", features = ["blocking"] }
+serde = "1"
+serde_derive = "1"
+serde_yaml = "0.9"
+serde-aux = "4.2"
+shellexpand = "2.1"
+strum = "0.24"
+strum_macros = "0.24"
+
+[dev-dependencies]
+pretty_assertions = "1"
+rstest = "0.15"
+rstest_reuse = "0.3"
