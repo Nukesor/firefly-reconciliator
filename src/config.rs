@@ -18,20 +18,22 @@ pub struct Configuration {
     pub accounts: Vec<Account>,
 }
 
+/// The historic target data of an account.
+/// Entries are years that contain months of target money entries for the end of that month.
+/// Money values are in Cent.
+/// Structured as such:
+/// 2023:
+///   1: 512315
+///   2: 123410
+/// ...
+///   12: 190512
+pub type BankData = BTreeMap<i32, BTreeMap<u32, i64>>;
+
 #[derive(PartialEq, Eq, Clone, Debug, Deserialize, Serialize)]
 pub struct Account {
     pub name: String,
     pub firefly_id: usize,
-    /// The historic target data of this account.
-    /// Entries are years that contain months of target money entries for the end of that month.
-    /// Money values are in Cent.
-    /// Structured as such:
-    /// 2023:
-    ///   1: 512315
-    ///   2: 123410
-    /// ...
-    ///   12: 190512
-    pub data: BTreeMap<usize, BTreeMap<usize, usize>>,
+    pub data: BankData,
 }
 
 /// Little helper which expands a given path's `~` characters to a fully qualified path.

@@ -11,6 +11,8 @@ use reqwest::{
     header::{HeaderMap, HeaderValue},
 };
 
+use crate::firefly::history_replay;
+
 mod args;
 mod config;
 mod firefly;
@@ -38,8 +40,8 @@ fn main() -> Result<()> {
     let client = ClientBuilder::new().default_headers(headers).build()?;
 
     for account in config.accounts {
-        let data = get_transactions_for_account(&client, account.firefly_id)?;
-        println!("{data:#?}");
+        let transactions = get_transactions_for_account(&client, account.firefly_id)?;
+        history_replay(account.firefly_id, account.data, transactions)?;
     }
 
     Ok(())
