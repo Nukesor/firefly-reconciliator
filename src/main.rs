@@ -6,10 +6,6 @@ use pretty_env_logger::env_logger::Builder;
 
 use args::Arguments;
 use log::LevelFilter;
-use reqwest::{
-    blocking::ClientBuilder,
-    header::{HeaderMap, HeaderValue},
-};
 
 use crate::firefly::history_replay;
 
@@ -28,20 +24,13 @@ fn main() -> Result<()> {
 
     let config = Configuration::read(&args.config)?;
 
-    // Prepare default headers for firefly api.
-    let mut headers = HeaderMap::new();
-    headers.insert("accept", HeaderValue::from_str("application/vnd.api+json")?);
-    headers.insert(
-        "Authorization",
-        HeaderValue::from_str(&format!("Bearer {}", config.token))?,
-    );
-    headers.insert("Content-Type", HeaderValue::from_str("application/json")?);
-
-    let client = ClientBuilder::new().default_headers(headers).build()?;
-
-    for account in config.accounts {
-        let transactions = get_transactions_for_account(&client, account.firefly_id)?;
-        history_replay(account.firefly_id, account.data, transactions)?;
+    for account in &config.accounts {
+        println!(
+            "Requesting transactions for account: {} ({})",
+            account.name, account.firefly_id
+        );
+        let transactions = get_transactions_for_account(&config, account.firefly_id)?;
+        history_replay(&config, account.firefly_id, &account.data, transactions)?;
     }
 
     Ok(())

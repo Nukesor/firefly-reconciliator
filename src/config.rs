@@ -15,6 +15,7 @@ use shellexpand::tilde;
 #[derive(PartialEq, Eq, Clone, Debug, Deserialize, Serialize)]
 pub struct Configuration {
     pub token: String,
+    pub base_url: String,
     pub accounts: Vec<Account>,
 }
 
